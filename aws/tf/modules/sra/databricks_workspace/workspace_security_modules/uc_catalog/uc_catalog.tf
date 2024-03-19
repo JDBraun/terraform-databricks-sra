@@ -135,7 +135,7 @@ resource "databricks_storage_credential" "workspace_catalog_storage_credential" 
 // External Location
 resource "databricks_external_location" "workspace_catalog_external_location" {
   name            = var.uc_catalog_name
-  url             = "s3://${var.uc_catalog_name}/"
+  url             = "s3://${var.uc_catalog_name}/catalog/"
   credential_name = databricks_storage_credential.workspace_catalog_storage_credential.id
   skip_validation = true
   read_only       = false
@@ -148,11 +148,11 @@ resource "databricks_catalog" "workspace_catalog" {
   name           = var.uc_catalog_name
   comment        = "This catalog is for workspace - ${var.workspace_id}"
   isolation_mode = "ISOLATED"
-  storage_root   = "s3://${var.uc_catalog_name}/"
+  storage_root   = "s3://${var.uc_catalog_name}/catalog/"
   properties = {
     purpose = "Catalog for workspace - ${var.workspace_id}"
   }
-  depends_on = [ databricks_external_location.workspace_catalog_external_location ]
+  depends_on = [databricks_external_location.workspace_catalog_external_location]
 }
 
 // Grant Admin Catalog Perms
